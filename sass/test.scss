@@ -1,0 +1,11 @@
+@import "compass/utilities/sprites";
+
+body {
+  color: red;
+}
+
+.test {
+  background: image-url("icons/fullpage_hover.png");
+}
+
+@import "icons/*.png";

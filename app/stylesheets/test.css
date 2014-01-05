@@ -1,0 +1,14 @@
+/* line 3, ../../sass/test.scss */
+body {
+  color: red;
+}
+
+/* line 7, ../../sass/test.scss */
+.test {
+  background: url('../images/icons/fullpage_hover.png?1387215563');
+}
+
+/* line 226, icons/*.png */
+.icons-sprite {
+  background: url('../images/icons-sf51c577602.png') no-repeat;
+}

@@ -1,0 +1,17 @@
+{
+    "undef": false,
+    "strict": false,
+    "unused": false,
+    "eqeqeq": false,
+    //"-W054": true,
+
+    "evil": true,
+    "supernew": true,
+    "funcscope": true,
+    "expr": true,
+    "eqnull": true,
+    "boss": true,
+    "globals": {
+        "$": false
+    }
+}
