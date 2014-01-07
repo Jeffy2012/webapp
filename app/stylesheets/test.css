@@ -1,14 +1,72 @@
-/* line 3, ../../sass/test.scss */
+/* line 1, ../../sass/test.scss */
 body {
-  color: red;
+  background: black;
+  color: #333;
+  font-family: Helvetica, sans-serif;
 }
 
 /* line 7, ../../sass/test.scss */
-.test {
-  background: url('../images/icons/fullpage_hover.png?1387215563');
+p {
+  width: 60%;
+  min-width: 18.75em;
+  max-width: 43.75em;
+  margin: 2em auto;
+  background: #fff;
+  padding: 20px;
 }
 
-/* line 226, icons/*.png */
-.icons-sprite {
-  background: url('../images/icons-sf51c577602.png') no-repeat;
+/* line 16, ../../sass/test.scss */
+a {
+  color: #333;
+}
+
+/* line 20, ../../sass/test.scss */
+#attribute-test {
+  display: none;
+}
+
+@media only screen and (min-width: 18.75em) {
+  /* line 25, ../../sass/test.scss */
+  body {
+    background: yellow;
+  }
+}
+@media only screen and (min-width: 30em) and (max-width: 38.75em) {
+  /* line 31, ../../sass/test.scss */
+  body {
+    background: green;
+  }
+}
+@media screen and (min-width: 38.75em), only print, projector {
+  /* line 37, ../../sass/test.scss */
+  body {
+    background: green;
+  }
+}
+@media screen and (min-width: 50em) {
+  /* line 43, ../../sass/test.scss */
+  body {
+    background: green;
+  }
+}
+@media screen and (min-width: 68.75em) {
+  /* line 49, ../../sass/test.scss */
+  body {
+    background: orange;
+  }
+}
+@media screen and (min-width: 1200px) {
+  /* line 55, ../../sass/test.scss */
+  body {
+    background: navy;
+  }
+}
+@media screen and (max-width: 500px) {
+  /* line 61, ../../sass/test.scss */
+  .test {
+    width: 100%;
+    height: 100px;
+    background: green;
+    color: red;
+  }
 }

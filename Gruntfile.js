@@ -1,6 +1,6 @@
 var path = require("path");
 module.exports = function (grunt) {
-    require('load-grunt-tasks')(grunt);
+    require('load-grunt-tasks')(grunt, {pattern: 'grunt-*'});
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -12,25 +12,14 @@ module.exports = function (grunt) {
             }
         },
         concat: {
-            /*js: {
-             files: [
-             {
-             src: ["app/libs*//*.js", "app/src*//*.js"],
-             dest: 'app/build/soma.js'
-             }
-             ]
-             },*/
             css: {
                 files: [
                     {
-                        src: ["app/stylesheets/*.css"],
+                        src: ["app/stylesheets/*.css", "!app/stylesheets/app.css", "!app/stylesheets/app.min.css"],
                         dest: "app/stylesheets/app.css"
                     }
                 ]
             }
-        },
-        csslint: {
-
         },
         cssmin: {
             options: {
@@ -43,11 +32,11 @@ module.exports = function (grunt) {
             }
         },
         mocha: {
+            options: {
+                run: true
+            },
             test: {
-                options: {
-                    run: true
-                },
-                src: ['tests/**/*.html']
+                src: ["tests/**/*.html"]
             }
         },
         jshint: {
@@ -69,17 +58,19 @@ module.exports = function (grunt) {
             options: {
                 //report: "gzip",
                 preserveComments: false,
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
-                sourceMap: function (dest) {
-                    return dest + ".map";
-                },
-                //sourceMapRoot: "../javascripts",
-                sourceMapPrefix: 2,
-                sourceMappingURL: function (dest) {
-                    return path.basename(dest) + ".map";
-                }
+                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
             build: {
+                options: {
+                    sourceMap: function (dest) {
+                        return dest + ".map";
+                    },
+                    //sourceMapRoot: "../javascripts",
+                    sourceMapPrefix: 2,
+                    sourceMappingURL: function (dest) {
+                        return path.basename(dest) + ".map";
+                    }
+                },
                 files: [
                     {
                         expand: true,
@@ -87,12 +78,16 @@ module.exports = function (grunt) {
                         src: ["**/*.js", "!**/*.min.js"],
                         dest: "app/javascripts/",
                         ext: ".min.js"
-                    },
+                    }
+                ]
+            },
+            vendor: {
+                files: [
                     {
                         expand: true,
-                        cwd: "app/build/",
+                        cwd: "app/vendor/",
                         src: ["**/*.js", "!**/*.min.js"],
-                        dest: "app/build/",
+                        dest: "app/vendor/",
                         ext: ".min.js"
                     }
                 ]
@@ -116,26 +111,48 @@ module.exports = function (grunt) {
             build: [".sass-cache"]
         },
         watch: {
+            options: {
+                livereload: 35729
+            },
             js: {
                 files: ["app/javascripts/**/*.js"],
                 tasks: ["js"]
+            },
+            css: {
+                files: ["sass/**/*.scss"],
+                tasks: ["css"]
             }
         },
-        connect: {
+        express: {
+            options: {
+                hostname: '*',
+                server: path.resolve('./server')
+            },
             server: {
                 options: {
+                    livereload: true,
                     port: 8000,
-                    protocol: "http",
-                    base: "app",
-                    keepalive: true
+                    bases: "app",
+                    open: true
+                }
+            },
+            mocha: {
+                options: {
+                    open: "http://localhost:8001/tests/Spec.html",
+                    port: 8001,
+                    bases: "../webapp"
                 }
             }
+        },
+        concurrent: {
+            build: ["css", "js"]
         }
     });
 
-
+    grunt.registerTask('serve', ['express:server', 'express-keepalive']);
+    grunt.registerTask("test", ["express:mocha", 'express-keepalive']);
     grunt.registerTask("css", ["compass", "concat:css", "cssmin"]);
     grunt.registerTask("js", ["mocha", "jshint", 'uglify', "replace"]);
     // Default task(s).
-    grunt.registerTask('default', ["compass", "concat", "cssmin", "jasmine", "jshint", 'uglify', "replace"]);
+    grunt.registerTask('default', ["concurrent:build"]);
 };
